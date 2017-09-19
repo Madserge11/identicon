@@ -25,7 +25,9 @@ defmodule Identicon do
     File.write("#{input}.png", image)
   end
 
-
+  @doc """
+  
+  """
   def draw_image(%Identicon.Image{color: color, pixel_map: pixel_map}) do
     image = :egd.create(250, 250)
     fill = :egd.color(color)
@@ -38,7 +40,7 @@ defmodule Identicon do
   end
 
   @doc """
-  Builds squares in the image.
+  Builds the square mapping for the image.
   """
   def build_pixel_map(%Identicon.Image{grid: grid} = image) do
     pixel_map = Enum.map grid, fn({_code, index}) ->
@@ -65,6 +67,9 @@ defmodule Identicon do
     %Identicon.Image{image | grid: grid}
   end
 
+  @doc """
+  Takes the list chunks it up in 3 pieces then mirrors the 1st 2(examples are in mirror row function)
+  """
   def build_grid(%Identicon.Image{hex: hex} = image)do
     grid = hex
       |> Enum.chunk(3)
@@ -75,6 +80,10 @@ defmodule Identicon do
     %Identicon.Image{image | grid: grid}
   end
 
+
+  @doc """
+  mirrors the first 2 numbers in the list but in reverse order.
+  """
   def mirror_row (row) do
     # Example [199, 148, 99]
     [first, second | _tail] = row
@@ -90,6 +99,9 @@ defmodule Identicon do
     %Identicon.Image{image | color: {r, g, b}}
   end
 
+  @doc """
+  Takes the input and turns it into a list.
+  """
   def hash_input(input) do
     hex = :crypto.hash(:md5, input)
     |> :binary.bin_to_list
